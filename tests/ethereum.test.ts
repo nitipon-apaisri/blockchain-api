@@ -8,4 +8,10 @@ describe('Ethereum', () => {
         expect(response.body).toHaveProperty('message', 'OK')
         expect(response.body).toHaveProperty('result');
     });
+    test('should return Ethereum total nodes', async () => {
+        const response = await request(app).get('/api/ethereum/nodes');
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('message', 'OK')
+        expect(response.body).toHaveProperty('result');
+     })
 });
