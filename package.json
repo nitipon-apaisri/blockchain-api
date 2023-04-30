@@ -26,6 +26,7 @@
         "typescript": "^5.0.4"
     },
     "dependencies": {
+        "alchemy-sdk": "^2.8.1",
         "dotenv": "^16.0.3"
     }
 }

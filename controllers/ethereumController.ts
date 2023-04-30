@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getEthereumStats, getEthereumAccountBalance, getEthereumTransactions } from "../models/ethereumModel";
+import { getEthereumStats, getEthereumAccount, getEthereumTransactions } from "../models/ethereumModel";
 
 export const getEthereumStatsController = async (req: Request, res: Response) => {
     try {
@@ -11,10 +11,10 @@ export const getEthereumStatsController = async (req: Request, res: Response) =>
     }
 };
 
-export const getEthereumAccountBalanceController = async (req: Request, res: Response) => {
+export const getEthereumAccountController = async (req: Request, res: Response) => {
     try {
         const address = req.query.address as string;
-        const data = await getEthereumAccountBalance(address);
+        const data = await getEthereumAccount(address);
         res.status(200).json(data);
     } catch (error) {
         console.log(error);
@@ -24,8 +24,8 @@ export const getEthereumAccountBalanceController = async (req: Request, res: Res
 
 export const getEthereumTransactionsController = async (req: Request, res: Response) => {
     try {
-        const address = req.query.address as string;
-        const data = await getEthereumTransactions(address);
+        const txHash = req.query.txhash as string;
+        const data = await getEthereumTransactions(txHash);
         res.status(200).json(data);
     } catch (error) {
         console.log(error);

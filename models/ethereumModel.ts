@@ -1,6 +1,13 @@
-import { ethereumStats } from "../types/ethereumTypes";
+import { ethereumAccount, ethereumStats } from "../types/ethereumTypes";
 import { weiToEth } from "../utils/convert";
 
+// import { Alchemy, Network, AssetTransfersCategory } from "alchemy-sdk";
+// const config = {
+//     apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API key.
+//     network: Network.ETH_MAINNET, // Replace with your network.
+//   };
+
+// const alchemy = new Alchemy(config);
 const url = process.env.ETHERSCAN_API_URL;
 const api = process.env.ETHERSCAN_API_KEY;
 
@@ -25,15 +32,27 @@ export const getEthereumStats = async () => {
     }
 };
 
-export const getEthereumAccountBalance = async (address: string) => {
-    const res = await fetch(`${url}?module=account&action=balance&address=${address}&tag=latest&apikey=${api}`);
-    const data = await res.json();
-    const balance = weiToEth(data.result);
-    return balance;
+export const getEthereumAccount = async (address: string) => {
+    const resAccountBalance = await fetch(`${url}?module=account&action=balance&address=${address}&tag=latest&apikey=${api}`);
+    const resAccountTransactions = await fetch(`${url}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&apikey=${api}`);
+    const accountBalanceData = await resAccountBalance.json();
+    const accountTransactionsData = await resAccountTransactions.json();
+    const account: ethereumAccount = {
+        account: {
+            balance: weiToEth(accountBalanceData.result),
+            transactions: accountTransactionsData.result,
+        },
+    };
+    if (resAccountBalance.status !== 200 || resAccountTransactions.status !== 200) {
+        throw new Error("Error fetching Ethereum account");
+    } else {
+        return account;
+    }
 };
 
-export const getEthereumTransactions = async (address: string) => {
-    const res = await fetch(`${url}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&apikey=${api}`);
+export const getEthereumTransactions = async (txHash: string) => {
+    console.log(txHash);
+    const res = await fetch(`${url}?module=account&action=txlistinternal&txhash=${txHash}&apikey=${api}`);
     const data = await res.json();
     return data;
 };

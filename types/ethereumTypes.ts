@@ -7,3 +7,10 @@ export interface ethereumStats {
         totalNodes: number;
     };
 }
+
+export interface ethereumAccount {
+    account: {
+        balance: number;
+        transactions: { [key: string]: string }[];
+    };
+}
