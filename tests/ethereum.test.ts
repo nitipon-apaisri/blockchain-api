@@ -1,7 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 import request from "supertest";
 import app from "../app";
-import { weiToEth } from "../utils/convert";
+import { weiToGwei, weiToEth } from "../utils/convert";
 describe("Ethereum", () => {
     const address: string = "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae";
     const txHash: string = "0x7c103b7a93c6d73f5840d5452b4bc01a032940c3ca6fbc4792123bad55017dab";
@@ -16,15 +16,17 @@ describe("Ethereum", () => {
         expect(response.body).toHaveProperty("account");
         expect(response.body.account).toHaveProperty("balance");
     });
-    // test("should return Ethereum transactions", async () => {
-    //     const response = await request(app).get(`/api/ethereum/transactions?txhash=${txHash}`);
-    //     expect(response.status).toBe(200);
-    //     expect(response.body).toHaveProperty("message", "OK");
-    //     expect(response.body).toHaveProperty("result");
-    // });
+    test("should return Ethereum transaction", async () => {
+        const response = await request(app).get(`/api/ethereum/transactions?txhash=${txHash}`);
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty("transaction");
+    });
 });
 describe("Utils", () => {
     test("10^18 wei should be 1 ETH", () => {
-        expect(weiToEth("1000000000000000000")).toBe(1);
+        expect(weiToEth("1000000000000000000", false)).toBe(1);
+    });
+    test("10^18 wei should be 10^9 gwei ", () => {
+        expect(weiToGwei("1000000000000000000")).toBe(1000000000);
     });
 });
