@@ -1,3 +1,4 @@
+import axios from "axios";
 import { ethereumAccount, ethereumStats } from "../types/ethereumTypes";
 import { weiToEth, weiToGwei } from "../utils/converts";
 import { Alchemy, Network, BigNumber } from "alchemy-sdk";
@@ -9,10 +10,10 @@ const alchemy = new Alchemy(config);
 const url = process.env.ETHERSCAN_API_URL;
 const api = process.env.ETHERSCAN_API_KEY;
 export const getEthereumStats = async () => {
-    const resEthSupply = await fetch(`${url}?module=stats&action=ethsupply2&apikey=${api}`);
-    const resEthNodes = await fetch(`${url}?module=stats&action=nodecount&apikey=${api}`);
-    const ethSupplyData = await resEthSupply.json();
-    const ethNodesData = await resEthNodes.json();
+    const resEthSupply = await axios.get(`${url}?module=stats&action=ethsupply2&apikey=${api}`);
+    const resEthNodes = await axios.get(`${url}?module=stats&action=nodecount&apikey=${api}`);
+    const ethSupplyData = await resEthSupply.data;
+    const ethNodesData = await resEthNodes.data;
     const stats: ethereumStats = {
         stats: {
             supply: weiToEth(ethSupplyData.result.EthSupply, false),
@@ -30,10 +31,10 @@ export const getEthereumStats = async () => {
 };
 
 export const getEthereumAccount = async (address: string) => {
-    const resAccountBalance = await fetch(`${url}?module=account&action=balance&address=${address}&tag=latest&apikey=${api}`);
-    const resAccountTransactions = await fetch(`${url}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&apikey=${api}`);
-    const accountBalanceData = await resAccountBalance.json();
-    const accountTransactionsData = await resAccountTransactions.json();
+    const resAccountBalance = await axios.get(`${url}?module=account&action=balance&address=${address}&tag=latest&apikey=${api}`);
+    const resAccountTransactions = await axios.get(`${url}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&apikey=${api}`);
+    const accountBalanceData = await resAccountBalance.data;
+    const accountTransactionsData = await resAccountTransactions.data;
     const account: ethereumAccount = {
         account: {
             balance: weiToEth(accountBalanceData.result, false),
