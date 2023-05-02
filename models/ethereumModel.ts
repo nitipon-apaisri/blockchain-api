@@ -1,6 +1,6 @@
 import { ethereumAccount, ethereumStats } from "../types/ethereumTypes";
-import { weiToEth, weiToGwei } from "../utils/convert";
-import { Alchemy, Network, AssetTransfersCategory, BigNumber } from "alchemy-sdk";
+import { weiToEth, weiToGwei } from "../utils/converts";
+import { Alchemy, Network, BigNumber } from "alchemy-sdk";
 const config = {
     apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API key.
     network: Network.ETH_MAINNET, // Replace with your network.
