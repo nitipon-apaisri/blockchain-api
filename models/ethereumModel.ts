@@ -1,13 +1,11 @@
 import axios from "axios";
-import { ethereumAccount, ethereumStats } from "../types/ethereumTypes";
-import { weiToEth, weiToGwei } from "../utils/converts";
-import { Alchemy, Network, BigNumber } from "alchemy-sdk";
+import { ethereumAccount, ethereumStats, tokenERC20 } from "../types/ethereumTypes";
+import { tokenBalanceFormat, weiToEth, weiToGwei } from "../utils/converts";
+import { Alchemy, BigNumber } from "alchemy-sdk";
 import { sortTransactions } from "../utils/sortTransactions";
-const config = {
-    apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API key.
-    network: Network.ETH_MAINNET, // Replace with your network.
-};
-const alchemy = new Alchemy(config);
+import { alchemyConfig } from "../configs/alchemy";
+
+const alchemy = new Alchemy(alchemyConfig);
 const url = process.env.ETHERSCAN_API_URL;
 const api = process.env.ETHERSCAN_API_KEY;
 export const getEthereumStats = async () => {
@@ -32,13 +30,25 @@ export const getEthereumStats = async () => {
 };
 
 export const getEthereumAccount = async (address: string) => {
+    const tokenBalances = Array<tokenERC20>();
     const resAccountBalance = await axios.get(`${url}?module=account&action=balance&address=${address}&tag=latest&apikey=${api}`);
     const resAccountTransactions = await axios.get(`${url}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&apikey=${api}`);
+    const tokens = await alchemy.core.getTokenBalances(address);
+    for (let i of tokens.tokenBalances) {
+        const token = await alchemy.core.getTokenMetadata(i.contractAddress);
+        const tokenBalance = {
+            name: token.name,
+            balance: tokenBalanceFormat(i, token.symbol as string),
+        };
+        tokenBalances.push(tokenBalance as tokenERC20);
+    }
     const accountBalanceData = await resAccountBalance.data;
     const accountTransactionsData = await resAccountTransactions.data;
     const account: ethereumAccount = {
         account: {
-            balance: weiToEth(accountBalanceData.result, false),
+            address: address,
+            balance: `${weiToEth(accountBalanceData.result, false)} ETH`,
+            tokens: tokenBalances,
             transactions: sortTransactions(accountTransactionsData.result, address),
         },
     };
