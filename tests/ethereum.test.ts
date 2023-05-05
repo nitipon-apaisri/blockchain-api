@@ -12,7 +12,7 @@ describe("Ethereum", () => {
     test("should return Ethereum account", async () => {
         const response = await request(app).get(`/api/ethereum/account?address=${address}`);
         expect(response.status).toBe(200);
-        expect(response.body.account).toHaveProperty("balance");
+        expect(response.body.account).toHaveProperty("transactions");
     });
     test("should return Ethereum transaction", async () => {
         const response = await request(app).get(`/api/ethereum/transactions?txhash=${txHash}`);

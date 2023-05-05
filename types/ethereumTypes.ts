@@ -11,6 +11,6 @@ export interface ethereumStats {
 export interface ethereumAccount {
     account: {
         balance: number;
-        transactions: { [key: string]: string }[];
+        transactions: { sent: any; received: any };
     };
 }

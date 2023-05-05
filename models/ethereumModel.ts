@@ -2,6 +2,7 @@ import axios from "axios";
 import { ethereumAccount, ethereumStats } from "../types/ethereumTypes";
 import { weiToEth, weiToGwei } from "../utils/converts";
 import { Alchemy, Network, BigNumber } from "alchemy-sdk";
+import { sortTransactions } from "../utils/sortTransactions";
 const config = {
     apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API key.
     network: Network.ETH_MAINNET, // Replace with your network.
@@ -38,7 +39,7 @@ export const getEthereumAccount = async (address: string) => {
     const account: ethereumAccount = {
         account: {
             balance: weiToEth(accountBalanceData.result, false),
-            transactions: accountTransactionsData.result,
+            transactions: sortTransactions(accountTransactionsData.result, address),
         },
     };
     if (resAccountBalance.status !== 200 || resAccountTransactions.status !== 200) {
