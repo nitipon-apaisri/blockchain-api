@@ -1,16 +1,28 @@
 export interface ethereumStats {
     stats: {
-        supply: number;
-        staking: number;
-        burntFees: number;
-        totalWithdrawn: number;
-        totalNodes: number;
+        supply: valueFormat;
+        staking: valueFormat;
+        burntFees: valueFormat;
+        totalWithdrawn: valueFormat;
+        totalNodes: valueFormat;
     };
 }
 
 export interface ethereumAccount {
     account: {
-        balance: number;
-        transactions: { [key: string]: string }[];
+        address: string;
+        balance: valueFormat;
+        transactions: { sent: any; received: any };
+        tokens: Array<tokenERC20>;
     };
+}
+
+export interface tokenERC20 {
+    name: string;
+    balance: string;
+}
+
+export interface valueFormat {
+    value: number;
+    unit: string;
 }
