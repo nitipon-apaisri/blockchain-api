@@ -15,11 +15,26 @@ export const getEthereumStats = async () => {
     const ethNodesData = await resEthNodes.data;
     const stats: ethereumStats = {
         stats: {
-            supply: weiToEth(ethSupplyData.result.EthSupply, false),
-            staking: weiToEth(ethSupplyData.result.Eth2Staking, false),
-            burntFees: weiToEth(ethSupplyData.result.BurntFees, false),
-            totalWithdrawn: weiToEth(ethSupplyData.result.WithdrawnTotal, false),
-            totalNodes: Number(ethNodesData.result.TotalNodeCount),
+            supply: {
+                value: weiToEth(ethSupplyData.result.EthSupply, false),
+                unit: "ETH",
+            },
+            staking: {
+                value: weiToEth(ethSupplyData.result.Eth2Staking, false),
+                unit: "ETH",
+            },
+            burntFees: {
+                value: weiToEth(ethSupplyData.result.BurntFees, false),
+                unit: "ETH",
+            },
+            totalWithdrawn: {
+                value: weiToEth(ethSupplyData.result.WithdrawnTotal, false),
+                unit: "ETH",
+            },
+            totalNodes: {
+                value: Number(ethNodesData.result.TotalNodeCount),
+                unit: "Nodes",
+            },
         },
     };
     if (resEthSupply.status !== 200 || resEthNodes.status !== 200) {
@@ -47,7 +62,10 @@ export const getEthereumAccount = async (address: string) => {
     const account: ethereumAccount = {
         account: {
             address: address,
-            balance: `${weiToEth(accountBalanceData.result, false)} ETH`,
+            balance: {
+                value: weiToEth(accountBalanceData.result, false),
+                unit: "ETH",
+            },
             tokens: tokenBalances,
             transactions: sortTransactions(accountTransactionsData.result, address),
         },
