@@ -8,7 +8,7 @@
         "start": "node dist/app.js",
         "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app.js\"",
         "test-ci": "jest --ci --verbose",
-        "test": "jest --watchAll --verbose --silent"
+        "test": "jest --watchAll --verbose --silent "
     },
     "keywords": [],
     "author": "",
@@ -27,6 +27,8 @@
     },
     "dependencies": {
         "alchemy-sdk": "^2.8.1",
-        "dotenv": "^16.0.3"
+        "axios": "^1.4.0",
+        "dotenv": "^16.0.3",
+        "express-rate-limit": "^6.7.0"
     }
 }

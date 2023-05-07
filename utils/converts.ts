@@ -15,3 +15,8 @@ export const weiToGwei = (gwei: string) => {
     const calc = Number(gwei) / 10 ** 9;
     return Number(calc.toFixed(4));
 };
+
+export const tokenBalanceFormat = (token: any, symbol: string) => {
+    const tokenBalance = `${BigNumber.from(token.tokenBalance).toString()} ${symbol}`;
+    return tokenBalance;
+};
