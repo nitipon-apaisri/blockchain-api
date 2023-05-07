@@ -10,5 +10,6 @@ export const sortTransactions = (transactions: any, address: string) => {
             sent.push(i);
         }
     }
+
     return { sent, received };
 };

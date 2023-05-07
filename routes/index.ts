@@ -5,6 +5,6 @@ const router = Router();
 //Ethereum routes
 router.get("/ethereum/stats", getEthereumStatsController);
 router.get("/ethereum/account", getEthereumAccountController);
-router.get("/ethereum/transactions", getEthereumTransactionsController);
+router.get("/ethereum/transaction", getEthereumTransactionsController);
 
 export default router;

@@ -19,7 +19,7 @@ describe("Ethereum", () => {
         expect(response.body.account).toHaveProperty("transactions");
     }, 10000);
     test("should return Ethereum transaction", async () => {
-        const response = await request(app).get(`/api/ethereum/transactions?txhash=${txHash}`);
+        const response = await request(app).get(`/api/ethereum/transaction?txhash=${txHash}`);
         expect(response.status).toBe(200);
         expect(response.body.transaction).toHaveProperty("value");
     });

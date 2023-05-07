@@ -1,18 +1,17 @@
-import axios from "axios";
 import { ethereumAccount, ethereumStats, tokenERC20 } from "../types/ethereumTypes";
 import { tokenBalanceFormat, weiToEth, weiToGwei } from "../utils/converts";
-import { Alchemy, BigNumber } from "alchemy-sdk";
+import { BigNumber } from "alchemy-sdk";
 import { sortTransactions } from "../utils/sortTransactions";
-import { alchemyConfig } from "../configs/alchemy";
+import { EthereumApis } from "../services/api";
 
-const alchemy = new Alchemy(alchemyConfig);
-const url = process.env.ETHERSCAN_API_URL;
-const api = process.env.ETHERSCAN_API_KEY;
+const ethereumApis = new EthereumApis();
+
 export const getEthereumStats = async () => {
-    const resEthSupply = await axios.get(`${url}?module=stats&action=ethsupply2&apikey=${api}`);
-    const resEthNodes = await axios.get(`${url}?module=stats&action=nodecount&apikey=${api}`);
+    const resEthSupply = await ethereumApis.getSupply();
+    const resEthNodes = await ethereumApis.getNodes();
     const ethSupplyData = await resEthSupply.data;
     const ethNodesData = await resEthNodes.data;
+
     const stats: ethereumStats = {
         stats: {
             supply: {
@@ -37,6 +36,7 @@ export const getEthereumStats = async () => {
             },
         },
     };
+
     if (resEthSupply.status !== 200 || resEthNodes.status !== 200) {
         throw new Error("Error fetching Ethereum stats");
     } else {
@@ -46,19 +46,21 @@ export const getEthereumStats = async () => {
 
 export const getEthereumAccount = async (address: string) => {
     const tokenBalances = Array<tokenERC20>();
-    const resAccountBalance = await axios.get(`${url}?module=account&action=balance&address=${address}&tag=latest&apikey=${api}`);
-    const resAccountTransactions = await axios.get(`${url}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&apikey=${api}`);
-    const tokens = await alchemy.core.getTokenBalances(address);
+    const resAccountBalance = await ethereumApis.getAccountBalance(address);
+    const resAccountTransactions = await ethereumApis.getAccountTransactions(address);
+    const tokens = await ethereumApis.getTokenBalances(address);
+    const accountBalanceData = await resAccountBalance.data;
+    const accountTransactionsData = await resAccountTransactions.data;
+
     for (let i of tokens.tokenBalances) {
-        const token = await alchemy.core.getTokenMetadata(i.contractAddress);
+        const token = await ethereumApis.getTokenMetadata(i.contractAddress);
         const tokenBalance = {
             name: token.name,
             balance: tokenBalanceFormat(i, token.symbol as string),
         };
         tokenBalances.push(tokenBalance as tokenERC20);
     }
-    const accountBalanceData = await resAccountBalance.data;
-    const accountTransactionsData = await resAccountTransactions.data;
+
     const account: ethereumAccount = {
         account: {
             address: address,
@@ -70,6 +72,7 @@ export const getEthereumAccount = async (address: string) => {
             transactions: sortTransactions(accountTransactionsData.result, address),
         },
     };
+
     if (resAccountBalance.status !== 200 || resAccountTransactions.status !== 200) {
         throw new Error("Error fetching Ethereum account");
     } else {
@@ -77,8 +80,9 @@ export const getEthereumAccount = async (address: string) => {
     }
 };
 
-export const getEthereumTransactions = async (txHash: string) => {
-    const res = await alchemy.transact.getTransaction(txHash);
+export const getEthereumTransaction = async (txHash: string) => {
+    const res = await ethereumApis.getTransaction(txHash);
+
     const transaction = {
         transaction: {
             from: res?.from,
@@ -87,6 +91,7 @@ export const getEthereumTransactions = async (txHash: string) => {
             value: weiToEth(BigNumber.from(res?.value).toString(), res?.value._isBigNumber as boolean),
         },
     };
+
     if (res === null) {
         throw new Error("Error fetching Ethereum transactions");
     } else {

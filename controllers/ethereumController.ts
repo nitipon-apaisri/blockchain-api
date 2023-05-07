@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getEthereumStats, getEthereumAccount, getEthereumTransactions } from "../models/ethereumModel";
+import { getEthereumStats, getEthereumAccount, getEthereumTransaction } from "../models/ethereumModel";
 
 export const getEthereumStatsController = async (req: Request, res: Response) => {
     try {
@@ -25,7 +25,7 @@ export const getEthereumAccountController = async (req: Request, res: Response) 
 export const getEthereumTransactionsController = async (req: Request, res: Response) => {
     try {
         const txHash = req.query.txhash as string;
-        const data = await getEthereumTransactions(txHash);
+        const data = await getEthereumTransaction(txHash);
         res.status(200).json(data);
     } catch (error) {
         console.log(error);
