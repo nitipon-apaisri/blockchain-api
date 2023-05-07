@@ -1,4 +1,4 @@
-export interface ethereumStats {
+interface ethereumStats {
     stats: {
         supply: valueFormat;
         staking: valueFormat;
@@ -8,7 +8,7 @@ export interface ethereumStats {
     };
 }
 
-export interface ethereumAccount {
+interface ethereumAccount {
     account: {
         address: string;
         balance: valueFormat;
@@ -17,12 +17,23 @@ export interface ethereumAccount {
     };
 }
 
-export interface tokenERC20 {
+interface ethereumTransaction {
+    transaction: {
+        from: string;
+        to: string;
+        gasPrice: valueFormat;
+        value: valueFormat;
+    };
+}
+
+interface tokenERC20 {
     name: string;
     balance: string;
 }
 
-export interface valueFormat {
+interface valueFormat {
     value: number;
     unit: string;
 }
+
+export { ethereumStats, ethereumAccount, ethereumTransaction, tokenERC20 };
