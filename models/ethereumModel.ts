@@ -1,4 +1,4 @@
-import { ethereumAccount, ethereumStats, ethereumTransaction, tokenERC20 } from "../types/ethereumTypes";
+import { ethereumAccount, ethereumStats, ethereumTransaction, ethereumGas, tokenERC20 } from "../types/ethereumTypes";
 import { tokenBalanceFormat, weiToEth, weiToGwei } from "../utils/converts";
 import { BigNumber } from "alchemy-sdk";
 import { sortTransactions } from "../utils/sortTransactions";
@@ -6,7 +6,7 @@ import { EthereumApis } from "../services/api";
 
 const ethereumApis = new EthereumApis();
 
-export const getEthereumStats = async () => {
+const getEthereumStats = async () => {
     const resEthSupply = await ethereumApis.getSupply();
     const resEthNodes = await ethereumApis.getNodes();
     const ethSupplyData = await resEthSupply.data;
@@ -44,7 +44,7 @@ export const getEthereumStats = async () => {
     }
 };
 
-export const getEthereumAccount = async (address: string) => {
+const getEthereumAccount = async (address: string) => {
     const tokenBalances = Array<tokenERC20>();
     const resAccountBalance = await ethereumApis.getAccountBalance(address);
     const resAccountTransactions = await ethereumApis.getAccountTransactions(address);
@@ -80,7 +80,7 @@ export const getEthereumAccount = async (address: string) => {
     }
 };
 
-export const getEthereumTransaction = async (txHash: string) => {
+const getEthereumTransaction = async (txHash: string) => {
     const res = await ethereumApis.getTransaction(txHash);
 
     const transaction: ethereumTransaction = {
@@ -104,3 +104,24 @@ export const getEthereumTransaction = async (txHash: string) => {
         return transaction;
     }
 };
+
+const getEthereumGasPrice = async () => {
+    const res = await ethereumApis.getGasPrice();
+    const data = await res.data;
+    const gas: ethereumGas = {
+        gas: {
+            average: {
+                value: Number(Number(data.result.suggestBaseFee).toFixed(2)),
+                unit: "Gwei",
+            },
+            lastBlock: Number(data.result.LastBlock),
+        },
+    };
+    if (res === null) {
+        throw new Error("Error fetching Ethereum gas price");
+    } else {
+        return gas;
+    }
+};
+
+export { getEthereumStats, getEthereumAccount, getEthereumTransaction, getEthereumGasPrice };

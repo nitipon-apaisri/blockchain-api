@@ -23,4 +23,9 @@ describe("Ethereum", () => {
         expect(response.status).toBe(200);
         expect(response.body.transaction).toHaveProperty("value");
     });
+    test("should return Ethereum gas", async () => {
+        const response = await request(app).get("/api/ethereum/gas");
+        expect(response.status).toBe(200);
+        // expect(response.body.gas).toHaveProperty("fast");
+    });
 });
