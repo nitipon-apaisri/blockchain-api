@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { getEthereumStats, getEthereumAccount, getEthereumTransaction } from "../models/ethereumModel";
+import { getEthereumStats, getEthereumAccount, getEthereumTransaction, getEthereumGasPrice } from "../models/ethereumModel";
 
-export const getEthereumStatsController = async (req: Request, res: Response) => {
+const getEthereumStatsController = async (req: Request, res: Response) => {
     try {
         const data = await getEthereumStats();
         res.status(200).json(data);
@@ -11,7 +11,7 @@ export const getEthereumStatsController = async (req: Request, res: Response) =>
     }
 };
 
-export const getEthereumAccountController = async (req: Request, res: Response) => {
+const getEthereumAccountController = async (req: Request, res: Response) => {
     try {
         const address = req.query.address as string;
         const data = await getEthereumAccount(address);
@@ -22,7 +22,7 @@ export const getEthereumAccountController = async (req: Request, res: Response) 
     }
 };
 
-export const getEthereumTransactionsController = async (req: Request, res: Response) => {
+const getEthereumTransactionsController = async (req: Request, res: Response) => {
     try {
         const txHash = req.query.txhash as string;
         const data = await getEthereumTransaction(txHash);
@@ -32,3 +32,15 @@ export const getEthereumTransactionsController = async (req: Request, res: Respo
         res.status(500).json({ message: "Error fetching Ethereum transactions" });
     }
 };
+
+const getEthereumGasController = async (req: Request, res: Response) => {
+    try {
+        const data = await getEthereumGasPrice();
+        res.status(200).json(data);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error fetching Ethereum gas" });
+    }
+};
+
+export { getEthereumStatsController, getEthereumAccountController, getEthereumTransactionsController, getEthereumGasController };

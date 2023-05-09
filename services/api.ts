@@ -41,6 +41,10 @@ class EthereumApis {
         const resTransaction = await this.alchemy.transact.getTransaction(txHash);
         return resTransaction;
     }
+    async getGasPrice() {
+        const resGasPrice = await this.ethereumApiUrl.get(`?module=gastracker&action=gasoracle&apikey=${this.ethscanApiKey}`);
+        return resGasPrice;
+    }
 }
 
 export { EthereumApis };
