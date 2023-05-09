@@ -26,6 +26,12 @@ interface ethereumTransaction {
     };
 }
 
+interface ethereumGas {
+    gas: {
+        average: valueFormat;
+        lastBlock: number;
+    };
+}
 interface tokenERC20 {
     name: string;
     balance: string;
@@ -36,4 +42,4 @@ interface valueFormat {
     unit: string;
 }
 
-export { ethereumStats, ethereumAccount, ethereumTransaction, tokenERC20 };
+export { ethereumStats, ethereumAccount, ethereumTransaction, ethereumGas, tokenERC20 };
