@@ -6,7 +6,7 @@ import { EthereumApis } from "../services/api";
 
 const ethereumApis = new EthereumApis();
 
-export const getEthereumStats = async () => {
+const getEthereumStats = async () => {
     const resEthSupply = await ethereumApis.getSupply();
     const resEthNodes = await ethereumApis.getNodes();
     const ethSupplyData = await resEthSupply.data;
@@ -44,7 +44,7 @@ export const getEthereumStats = async () => {
     }
 };
 
-export const getEthereumAccount = async (address: string) => {
+const getEthereumAccount = async (address: string) => {
     const tokenBalances = Array<tokenERC20>();
     const resAccountBalance = await ethereumApis.getAccountBalance(address);
     const resAccountTransactions = await ethereumApis.getAccountTransactions(address);
@@ -80,7 +80,7 @@ export const getEthereumAccount = async (address: string) => {
     }
 };
 
-export const getEthereumTransaction = async (txHash: string) => {
+const getEthereumTransaction = async (txHash: string) => {
     const res = await ethereumApis.getTransaction(txHash);
 
     const transaction: ethereumTransaction = {
@@ -104,3 +104,11 @@ export const getEthereumTransaction = async (txHash: string) => {
         return transaction;
     }
 };
+
+const getEthereumGasPrice = async () => {
+    const res = await ethereumApis.getGasPrice();
+    const gasPrice = res?.data?.result;
+    return gasPrice;
+};
+
+export { getEthereumStats, getEthereumAccount, getEthereumTransaction, getEthereumGasPrice };
