@@ -21,7 +21,7 @@ interface ethereumTransaction {
     transaction: {
         from: string;
         to: string;
-        gasPrice: valueFormat;
+        transactionFee: valueFormat;
         value: valueFormat;
     };
 }

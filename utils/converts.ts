@@ -20,7 +20,7 @@ const tokenBalanceFormat = (token: any, symbol: string) => {
     const tokenBalance = `${BigNumber.from(token.tokenBalance).toString()} ${symbol}`;
     return tokenBalance;
 };
-const calcTransactionFee = (gasPrice: string, gasUsed: string) => {
+const calcTransactionFee = (gasPrice: string | number, gasUsed: string | number) => {
     const calc = (Number(gasPrice) * Number(gasUsed)) / 10 ** 18;
     return Number(calc);
 };
