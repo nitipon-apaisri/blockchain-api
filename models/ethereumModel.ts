@@ -85,6 +85,8 @@ const getEthereumTransaction = async (txHash: string) => {
 
     const transaction: ethereumTransaction = {
         transaction: {
+            txHash: res?.hash as string,
+            timeStamp: Number(res?.timestamp) as number,
             from: res?.from as string,
             to: res?.to as string,
             transactionFee: {
