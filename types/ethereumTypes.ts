@@ -12,16 +12,18 @@ interface ethereumAccount {
     account: {
         address: string;
         balance: valueFormat;
-        transactions: { sent: any; received: any };
+        transactions: { sent: ethereumTransaction; received: ethereumTransaction };
         tokens: Array<tokenERC20>;
     };
 }
 
 interface ethereumTransaction {
     transaction: {
+        txHash: string;
+        timeStamp: number;
         from: string;
         to: string;
-        gasPrice: valueFormat;
+        transactionFee: valueFormat;
         value: valueFormat;
     };
 }

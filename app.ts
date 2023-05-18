@@ -3,11 +3,14 @@ import express, { Express, Request, Response } from "express";
 import logger from "./middlewares/logger";
 import router from "./routes";
 import { limiter } from "./middlewares/limiter";
+import cors from "cors";
+
 const app: Express = express();
 const port = process.env.PORT || 1997;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
+app.use(cors());
 app.use("/api", limiter, router);
 app.get("/", (req: Request, res: Response) => {
     res.send("Hello World!");
