@@ -1,5 +1,5 @@
 import { ethereumAccount, ethereumStats, ethereumTransaction, ethereumGas, tokenERC20 } from "../types/ethereumTypes";
-import { tokenBalanceFormat, weiToEth, weiToGwei } from "../utils/converts";
+import { calcTransactionFee, tokenBalanceFormat, weiToEth, weiToGwei } from "../utils/converts";
 import { BigNumber } from "alchemy-sdk";
 import { sortTransactions } from "../utils/sortTransactions";
 import { EthereumApis } from "../services/api";
@@ -85,11 +85,13 @@ const getEthereumTransaction = async (txHash: string) => {
 
     const transaction: ethereumTransaction = {
         transaction: {
+            txHash: res?.hash as string,
+            timeStamp: Number(res?.timestamp) as number,
             from: res?.from as string,
             to: res?.to as string,
-            gasPrice: {
-                value: weiToGwei(BigNumber.from(res?.gasPrice).toString()),
-                unit: "Gwei",
+            transactionFee: {
+                value: calcTransactionFee(BigNumber.from(res?.gasPrice).toString(), BigNumber.from(res?.gasLimit).toString()),
+                unit: "ETH",
             },
             value: {
                 value: weiToEth(BigNumber.from(res?.value).toString(), res?.value._isBigNumber as boolean),
