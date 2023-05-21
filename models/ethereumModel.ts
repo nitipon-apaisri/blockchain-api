@@ -126,4 +126,14 @@ const getEthereumGasPrice = async () => {
     }
 };
 
-export { getEthereumStats, getEthereumAccount, getEthereumTransaction, getEthereumGasPrice };
+const getENSbyAddress = async (address: string) => {
+    const res = await ethereumApis.getENSbyAddress(address);
+    const data = await res;
+    if (res === null) {
+        throw new Error("Error fetching Ethereum ENS");
+    } else {
+        return data;
+    }
+};
+
+export { getEthereumStats, getEthereumAccount, getEthereumTransaction, getEthereumGasPrice, getENSbyAddress };

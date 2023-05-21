@@ -28,4 +28,9 @@ describe("Ethereum", () => {
         expect(response.status).toBe(200);
         // expect(response.body.gas).toHaveProperty("fast");
     });
+    test("should return ENS primary name", async () => {
+        const response = await request(app).get("/api/ethereum/ens?address=0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae");
+        expect(response.status).toBe(200);
+        expect(response.body.ens).toBe("vitalik.eth");
+    });
 });
