@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Alchemy } from "alchemy-sdk";
 import { alchemyConfig } from "../configs/alchemy";
-import { ENS } from "@ensdomains/ensjs";
 import { ethers } from "ethers";
 class EthereumApis {
     protected ethereumApiUrl: any = axios.create({ baseURL: process.env.ETHERSCAN_API_URL });
@@ -48,10 +47,8 @@ class EthereumApis {
     }
     async getENSbyAddress(address: string) {
         const provider = new ethers.JsonRpcProvider(`${process.env.INFURA_API_URL}/${process.env.INFURA_API_KEY}`);
-        // const ENSInstance = new ENS()
-        const blockNumber = await provider.getBlockNumber();
-        return blockNumber;
-        // const endPrimaryName = await ENSInstance.getName(address)
+        const ens = await provider.lookupAddress(address);
+        return ens;
     }
 }
 

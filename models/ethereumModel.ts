@@ -129,10 +129,13 @@ const getEthereumGasPrice = async () => {
 const getENSbyAddress = async (address: string) => {
     const res = await ethereumApis.getENSbyAddress(address);
     const data = await res;
+    const ens = {
+        ens: data,
+    };
     if (res === null) {
         throw new Error("Error fetching Ethereum ENS");
     } else {
-        return data;
+        return ens;
     }
 };
 
