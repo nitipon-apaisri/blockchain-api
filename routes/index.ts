@@ -7,5 +7,5 @@ router.get("/ethereum/stats", getEthereumStatsController);
 router.get("/ethereum/account", getEthereumAccountController);
 router.get("/ethereum/transaction", getEthereumTransactionsController);
 router.get("/ethereum/gas", getEthereumGasController);
-router.get("/ethereum/ens", getENSbyAddressController);
+router.get("/ethereum/ens/lookup", getENSbyAddressController);
 export default router;
