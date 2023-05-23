@@ -33,4 +33,9 @@ describe("Ethereum", () => {
         expect(response.status).toBe(200);
         expect(response.body.ens).toBe("vitalik.eth");
     });
+    test("should return the binding address", async () => {
+        const response = await request(app).get("/api/ethereum/ens/resolveName?ens=vitalik.eth");
+        expect(response.status).toBe(200);
+        expect(response.body.ens).toBe("0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
+    });
 });
