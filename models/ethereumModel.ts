@@ -126,4 +126,30 @@ const getEthereumGasPrice = async () => {
     }
 };
 
-export { getEthereumStats, getEthereumAccount, getEthereumTransaction, getEthereumGasPrice };
+const getENSbyAddress = async (address: string) => {
+    const res = await ethereumApis.getENSbyAddress(address);
+    const data = await res;
+    const ens = {
+        ens: data,
+    };
+    if (res === null) {
+        throw new Error("Error fetching Ethereum ENS");
+    } else {
+        return ens;
+    }
+};
+
+const getAddressbyENS = async (ens: string) => {
+    const res = await ethereumApis.getAddressbyENS(ens);
+    const data = await res;
+    const address = {
+        address: data,
+    };
+    if (res === null) {
+        throw new Error("Error fetching Ethereum address");
+    } else {
+        return address;
+    }
+};
+
+export { getEthereumStats, getEthereumAccount, getEthereumTransaction, getEthereumGasPrice, getENSbyAddress, getAddressbyENS };

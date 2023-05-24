@@ -1,4 +1,3 @@
-import { BigNumber } from "alchemy-sdk";
 import { ethereumTransaction } from "../types/ethereumTypes";
 import { calcTransactionFee, weiToEth } from "./converts";
 
