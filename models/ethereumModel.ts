@@ -139,4 +139,17 @@ const getENSbyAddress = async (address: string) => {
     }
 };
 
-export { getEthereumStats, getEthereumAccount, getEthereumTransaction, getEthereumGasPrice, getENSbyAddress };
+const getAddressbyENS = async (ens: string) => {
+    const res = await ethereumApis.getAddressbyENS(ens);
+    const data = await res;
+    const address = {
+        address: data,
+    };
+    if (res === null) {
+        throw new Error("Error fetching Ethereum address");
+    } else {
+        return address;
+    }
+};
+
+export { getEthereumStats, getEthereumAccount, getEthereumTransaction, getEthereumGasPrice, getENSbyAddress, getAddressbyENS };

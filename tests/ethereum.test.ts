@@ -26,16 +26,15 @@ describe("Ethereum", () => {
     test("should return Ethereum gas", async () => {
         const response = await request(app).get("/api/ethereum/gas");
         expect(response.status).toBe(200);
-        // expect(response.body.gas).toHaveProperty("fast");
     });
     test("should return ENS primary name", async () => {
-        const response = await request(app).get("/api/ethereum/ens/lookup?address=0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
+        const response = await request(app).get("/api/ethereum/ens/lookupAddress?address=0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
         expect(response.status).toBe(200);
         expect(response.body.ens).toBe("vitalik.eth");
     });
     test("should return the binding address", async () => {
         const response = await request(app).get("/api/ethereum/ens/resolveName?ens=vitalik.eth");
         expect(response.status).toBe(200);
-        expect(response.body.ens).toBe("0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
+        expect(response.body.address).toBe("0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
     });
 });

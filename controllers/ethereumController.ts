@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getEthereumStats, getEthereumAccount, getEthereumTransaction, getEthereumGasPrice, getENSbyAddress } from "../models/ethereumModel";
+import { getEthereumStats, getEthereumAccount, getEthereumTransaction, getEthereumGasPrice, getENSbyAddress, getAddressbyENS } from "../models/ethereumModel";
 
 const getEthereumStatsController = async (req: Request, res: Response) => {
     try {
@@ -54,4 +54,15 @@ const getENSbyAddressController = async (req: Request, res: Response) => {
     }
 };
 
-export { getEthereumStatsController, getEthereumAccountController, getEthereumTransactionsController, getEthereumGasController, getENSbyAddressController };
+const getAddressbyENSController = async (req: Request, res: Response) => {
+    try {
+        const name = req.query.ens as string;
+        const data = await getAddressbyENS(name);
+        res.status(200).json(data);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error fetching address by ENS" });
+    }
+};
+
+export { getEthereumStatsController, getEthereumAccountController, getEthereumTransactionsController, getEthereumGasController, getENSbyAddressController, getAddressbyENSController };
