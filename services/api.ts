@@ -1,12 +1,12 @@
 import axios from "axios";
 import { Alchemy } from "alchemy-sdk";
 import { alchemyConfig } from "../configs/alchemy";
-
+import { ethers } from "ethers";
 class EthereumApis {
     protected ethereumApiUrl: any = axios.create({ baseURL: process.env.ETHERSCAN_API_URL });
     protected ethscanApiKey: any = process.env.ETHERSCAN_API_KEY;
     protected alchemy = new Alchemy(alchemyConfig);
-
+    protected provider = new ethers.JsonRpcProvider(`${process.env.INFURA_API_URL}/${process.env.INFURA_API_KEY}`);
     async getSupply() {
         const resEthSupply = await this.ethereumApiUrl.get(`?module=stats&action=ethsupply2&apikey=${this.ethscanApiKey}`);
         return resEthSupply;
@@ -44,6 +44,14 @@ class EthereumApis {
     async getGasPrice() {
         const resGasPrice = await this.ethereumApiUrl.get(`?module=gastracker&action=gasoracle&apikey=${this.ethscanApiKey}`);
         return resGasPrice;
+    }
+    async getENSbyAddress(address: string) {
+        const ens = await this.provider.lookupAddress(address);
+        return ens;
+    }
+    async getAddressbyENS(ens: string) {
+        const address = await this.provider.resolveName(ens);
+        return address;
     }
 }
 

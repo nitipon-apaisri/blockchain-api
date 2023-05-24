@@ -17,8 +17,10 @@ jobs:
       name: prod
       ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
       ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
+      INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
       ETHERSCAN_API_URL: ${{ vars.ETHERSCAN_API_URL }}
       ALCHEMY_API_URL: ${{ vars.ALCHEMY_API_URL }}
+      INFURA_API_URL: ${{ vars.INFURA_API_URL }}
       PORT: ${{ vars.PORT }}
     strategy:
       matrix:
